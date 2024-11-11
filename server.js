@@ -1,11 +1,5 @@
 
 console.log('hello from Node')
-//timestamp https://youtu.be/9OfL9H6AmhQ?feature=shared&t=1021
-//https://www.youtube.com/watch?v=v_pcW65DGu8
-// custom middleware time 20:50
-// asyncHandler  for throwing errors  31:33
-// CORS 33:54
-// upload your code to github, then deploy to Render.com   @40:51
 
 
 
