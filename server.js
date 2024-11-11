@@ -104,9 +104,3 @@ async function run() {
 }
 //run().catch(console.dir);
 
-
-
-
-console.log('user id', process.env.DB_USER_ID);
-console.log('DB_PASSWORD', process.env.DB_PASSWORD);
-console.log('DB_uri', uri);
