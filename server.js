@@ -1,5 +1,5 @@
 
-console.log('hello from Node')
+console.log('is this thing on?')
 
 
 
@@ -14,8 +14,8 @@ const { MongoClient, ServerApiVersion } = require('mongodb');
 
 
 
-const uri = process.env.DB_CONNECTION;
-const FRONTEND = process.env.FRONTEND;
+var uri = process.env.DB_CONNECTION;
+const FRONTEND = process.env.FRONTEND.split(",").map(item => item.trim()) || '';
 
 const Product = require('./models/productModel');
 const ProductRoute = require('./routes/productRoutes');
@@ -32,12 +32,18 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use('/api/products', ProductRoute);
 
+// app.use(middleware1);
+// app.use(middleware2);
+
+
 
 
 
 //routes
-app.get('/' , (req, res) => {
-       res.send('Hello from API')
+//app.get('/' , middleware3, (req, res, next) => {
+app.get('/' ,  (req, res, next) => {
+       console.log('I am standard express function app.get/   Custom property: ', req.customProperty)      
+       res.send(`Hello from API  req: ${req.customProperty}`)
        //throw new Error('fake error')
 } )
 
@@ -47,18 +53,58 @@ app.get('/blog' , (req, res) => {
 } )
 
 
-app.use( errorMiddleware);
+
+
+
 
 mongoose.set("strictQuery", false);
  
 
+// app.use(errorMiddleware2);
+// app.use( errorMiddleware);
+
+function middleware1( req, res, next) {
+  console.log('hello from middleware 1')
+  //res.send( '<h1>Hello from middleware 1 </h1>')
+  const errorObj =  new Error('fake error from mid2')
+  req.customProperty=100;
+  next();
+}
+function middleware2( req, res, next) {
+  console.log('hello from middleware 2')
+  console.log('customProperty: ', req.customProperty);
+ // res.send( '<h1>Hello from middleware 2 </h1>');
+ next();
+}
+
+function middleware3( req, res, next) {
+  console.log('hello from middleware 3')
+  req.customProperty=300;
+  console.log('customProperty: ', req.customProperty);
+ // res.send( '<h1>Hello from middleware 3 </h1>')
+ next();
+}
+
+function errorMiddleware2 ( err, req, res, next ) {
+  err.status = 500;
+  console.log('das error: ', err.message);
+  console.log('das error status: ', err.status);
+  next(err);
+}
+
+
+
+// ATLAS ATLAS ATLAS ATLAS ATLAS ATLAS ATLAS ATLAS ATLAS ATLAS
 
 // mongoose.connect(uri, 
-//        {useNewUrlParser: true},
+//        {useNewUrlParser: true,
+//         uri_decode_auth: true},
 //        ()=> {console.log('connected to mongodb')}
 // );
 
 
+
+// connect to ATLAS
 mongoose.connect(uri , {useNewUrlParser: true})
 .then( () => {
   console.log('connected to MongoDB');
@@ -68,7 +114,6 @@ mongoose.connect(uri , {useNewUrlParser: true})
 
 } )
 })
-
 .catch( (error) => {
   console.log('Connection error: ',error)
 })
@@ -76,25 +121,24 @@ mongoose.connect(uri , {useNewUrlParser: true})
 
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  }
-});
+// const client = new MongoClient(uri, {
+//   serverApi: {
+//     version: ServerApiVersion.v1,
+//     strict: true,
+//     deprecationErrors: true,
+//   }
+// });
 
-async function run() {
-  try {
-    // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
-    // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
-  } finally {
-    // Ensures that the client will close when you finish/error
-    await client.close();
-  }
-}
+// async function run() {
+//   try {
+//     // Connect the client to the server	(optional starting in v4.7)
+//     await client.connect();
+//     // Send a ping to confirm a successful connection
+//     await client.db("admin").command({ ping: 1 });
+//     console.log("Pinged your deployment. You successfully connected to MongoDB!");
+//   } finally {
+//     // Ensures that the client will close when you finish/error
+//     await client.close();
+//   }
+// }
 //run().catch(console.dir);
-

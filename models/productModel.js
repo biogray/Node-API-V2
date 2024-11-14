@@ -23,10 +23,12 @@ const productSchema = mongoose.Schema(
               time : { type : Date, default: Date.now },
 
        },
-       {timestamps: true}
+       {timestamps: true},
+       { collection: 'soils' }
 );
 
 //creating a model to export  time: 25:00
-const Product = mongoose.model('Product', productSchema);
+// third parameter is collection name
+const Product = mongoose.model('Product', productSchema, 'products');
 
 module.exports = Product;

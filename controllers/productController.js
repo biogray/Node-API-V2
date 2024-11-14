@@ -6,6 +6,8 @@ const asyncHandler = require('express-async-handler')
 const getAllProducts = asyncHandler (async (req, res) => {
        try {
          const products = await Product.find({});
+         console.log('hello from controller middleware');
+         console.log('products: ',products)
          res.status(200).json( products )
          //res.send('Here is what i found in mongoDb: ', products)
      
